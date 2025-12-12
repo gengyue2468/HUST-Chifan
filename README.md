@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HUST-Chifan
 
-## Getting Started
+## 灵感
 
-First, run the development server:
+https://github.com/jyi2ya/HUST-Chifan
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+原项目使用perl写的，这里用next.js的服务端api重写了一个版本，嘻嘻，只是一个小玩具
+
+## 用途
+
+1.查询华科所有食堂的营业时间
+2.查询指定食堂的营业时间
+3.查询目前还有哪些食堂正在营业
+
+## 安装
+
+```
+git clone https://github.com/gengyue2468/HUST-Chifan
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```
+cd HUST-Chifan
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+npm i && npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+然后，打开浏览器进入`http://localhost:3000`
 
-## Learn More
+## 部署
 
-To learn more about Next.js, take a look at the following resources:
+如果想要部署到vercel，也很容易，注意要在环境变量配置中配置
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+NEXT_PUBLIC_BASE_URL=你的域名
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API
 
-## Deploy on Vercel
+`/api/canteen`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+**Method:GET** 获取所有食堂的JSON数据
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`/api/canteen/:canteenName`
+
+**Method:GET** 获取指定食堂的JSON数据
+
+`/api/canteen/open-now`
+
+**Method:GET** 获取目前能吃的食堂的数据
+
+## 与你的 bot 集成
+
+这个玩意儿可以轻松缝合到你的 next 项目中，搭建一个属于你的提醒吃饭 bot!
+
+只需要注意把当前的系统时间和获取到的数据一起写入llm的prompt里就可以了！
+
