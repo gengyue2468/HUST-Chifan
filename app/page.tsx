@@ -58,6 +58,49 @@ export default function Chifan() {
     return result;
   };
 
+  const getCanteenStatus = (canteen: any) => {
+    const today = now.format("YYYY-MM-DD");
+    
+    const activeTimes = canteen.times
+      .map((t: any) => {
+        let endTime = dayjs(`${today} ${t.end}`, "YYYY-MM-DD HH:mm");
+        const startTime = dayjs(`${today} ${t.start}`, "YYYY-MM-DD HH:mm");
+        if (endTime.isBefore(startTime)) {
+          endTime = endTime.add(1, "day");
+        }
+        const endDiff = endTime.diff(now, "minute");
+        const startDiff = startTime.diff(now, "minute");
+        return { time: t, endDiff, startDiff, startTime, endTime };
+      })
+      .filter((item: any) => item.endDiff > 0); 
+
+    if (activeTimes.length === 0) {
+      return "今天没饭吃了";
+    }
+
+    const nearest = activeTimes.reduce((prev: any, curr: any) => {
+      if (curr.startDiff <= 0 && prev.startDiff <= 0) {
+        return curr.endDiff < prev.endDiff ? curr : prev;
+      }
+      if (curr.startDiff > 0 && prev.startDiff > 0) {
+        return curr.startDiff < prev.startDiff ? curr : prev;
+      }
+      return curr.startDiff <= 0 ? curr : prev;
+    });
+
+
+    if (nearest.startDiff > 0) {
+      const hours = Math.floor(nearest.startDiff / 60);
+      const minutes = nearest.startDiff % 60;
+      let result = "";
+      if (hours > 0) result += `${hours}小时`;
+      if (minutes > 0 || hours === 0) result += `${minutes}分钟`;
+      return `${result}后开饭`;
+    }
+
+    return `还能吃 ${getRemainingTime(nearest.time)}`;
+  };
+
   const styles = {
     tabItem:
       "text-sm px-4 py-2 data-[state=active]:font-medium data-[state=active]:bg-neutral-900 dark:data-[state=active]:bg-neutral-100 data-[state=active]:text-neutral-100 dark:data-[state=active]:text-neutral-900 data-[state=active]:shadow-md rounded-full",
@@ -93,48 +136,14 @@ export default function Chifan() {
                           {canteen.name}
                         </h2>
                         <div className="text-sm opacity-80">
-                          {Math.min(
-                            ...canteen.times.map((t: any) => {
-                              const today = now.format("YYYY-MM-DD");
-                              let endTime = dayjs(
-                                `${today} ${t.end}`,
-                                "YYYY-MM-DD HH:mm"
-                              );
-                              const startTime = dayjs(
-                                `${today} ${t.start}`,
-                                "YYYY-MM-DD HH:mm"
-                              );
-                              if (endTime.isBefore(startTime))
-                                endTime = endTime.add(1, "day");
-                              const diff = endTime.diff(now, "minute");
-                              return diff > 0 ? diff : Infinity;
-                            })
-                          ) !== Infinity
-                            ? `还能吃 ${getRemainingTime(
-                                canteen.times.find((t: any) => {
-                                  const today = now.format("YYYY-MM-DD");
-                                  let endTime = dayjs(
-                                    `${today} ${t.end}`,
-                                    "YYYY-MM-DD HH:mm"
-                                  );
-                                  const startTime = dayjs(
-                                    `${today} ${t.start}`,
-                                    "YYYY-MM-DD HH:mm"
-                                  );
-                                  if (endTime.isBefore(startTime))
-                                    endTime = endTime.add(1, "day");
-                                  return endTime.diff(now, "minute") > 0;
-                                })!
-                              )}`
-                            : "今天没饭吃了"}
+                          {getCanteenStatus(canteen)}
                         </div>
                       </div>
                       <ul className="mt-2 opacity-50 text-sm">
                         {canteen.times.map((time: any, idx: number) => (
                           <li key={idx}>
                             {time.meal}: {time.start} - {time.end} (
-                            {getRemainingTime(time) != "已结束" && "还能吃 "}
-                            {getRemainingTime(time)})
+                           {getCanteenStatus(canteen)})
                           </li>
                         ))}
                       </ul>
@@ -142,7 +151,7 @@ export default function Chifan() {
                   ))}
                 </ul>
               ) : (
-                <p className="ml-2">现在没有食堂开门哦！没饭吃了awa</p>
+                <p className="ml-2">坏了，今天没有吃的了</p>
               )
             ) : (
               <>
@@ -166,40 +175,7 @@ export default function Chifan() {
                         {canteen.name}
                       </h2>
                       <div className="text-sm opacity-80">
-                        {Math.min(
-                          ...canteen.times.map((t: any) => {
-                            const today = now.format("YYYY-MM-DD");
-                            let endTime = dayjs(
-                              `${today} ${t.end}`,
-                              "YYYY-MM-DD HH:mm"
-                            );
-                            const startTime = dayjs(
-                              `${today} ${t.start}`,
-                              "YYYY-MM-DD HH:mm"
-                            );
-                            if (endTime.isBefore(startTime))
-                              endTime = endTime.add(1, "day");
-                            const diff = endTime.diff(now, "minute");
-                            return diff > 0 ? diff : Infinity;
-                          })
-                        ) !== Infinity
-                          ? `还能吃 ${getRemainingTime(
-                              canteen.times.find((t: any) => {
-                                const today = now.format("YYYY-MM-DD");
-                                let endTime = dayjs(
-                                  `${today} ${t.end}`,
-                                  "YYYY-MM-DD HH:mm"
-                                );
-                                const startTime = dayjs(
-                                  `${today} ${t.start}`,
-                                  "YYYY-MM-DD HH:mm"
-                                );
-                                if (endTime.isBefore(startTime))
-                                  endTime = endTime.add(1, "day");
-                                return endTime.diff(now, "minute") > 0;
-                              })!
-                            )}`
-                          : "今天没饭吃了"}
+                        {getCanteenStatus(canteen)}
                       </div>
                     </div>
 
@@ -207,8 +183,7 @@ export default function Chifan() {
                       {canteen.times.map((time: any, idx: number) => (
                         <li key={idx}>
                           {time.meal}: {time.start} - {time.end} (
-                          {getRemainingTime(time) != "已结束" && "还能吃 "}
-                          {getRemainingTime(time)})
+                          {getCanteenStatus(canteen)})
                         </li>
                       ))}
                     </ul>
