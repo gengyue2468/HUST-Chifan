@@ -14,11 +14,7 @@ export async function GET() {
   const open = data.canteens.filter((c: any) => {
     return c.times.some((t: any) => {
       const start = dayjs(`${todayStr} ${t.start}`, "YYYY-MM-DD HH:mm");
-      let end = dayjs(`${todayStr} ${t.end}`, "YYYY-MM-DD HH:mm");
-
-      if (end.isBefore(start)) {
-        end = end.add(1, "day");
-      }
+      const end = dayjs(`${todayStr} ${t.end}`, "YYYY-MM-DD HH:mm");
 
       return now.isAfter(start) && now.isBefore(end);
     });
