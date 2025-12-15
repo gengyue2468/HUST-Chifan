@@ -8,36 +8,30 @@ export async function GET() {
 
   const now = new Date();
 
-  const beijingNow = new Date(now.getTime() + 8 * 60 * 60 * 1000);
-
-  const currentHours = beijingNow.getUTCHours();
-  const currentMinutes = beijingNow.getUTCMinutes();
-  const currentTimeInMinutes = currentHours * 60 + currentMinutes;
+  const beijingMinutes =
+    (now.getUTCHours() + 8) * 60 + now.getUTCMinutes();
 
   const open = data.canteens
     .map((c: any) => {
       const currentTimeSlot = c.times.find((t: any) => {
-        const [startHour, startMinute] = t.start.split(":").map(Number);
-        const [endHour, endMinute] = t.end.split(":").map(Number);
+        const [sh, sm] = t.start.split(":").map(Number);
+        const [eh, em] = t.end.split(":").map(Number);
 
-        const startInMinutes = startHour * 60 + startMinute;
-        const endInMinutes = endHour * 60 + endMinute;
+        const start = sh * 60 + sm;
+        const end = eh * 60 + em;
 
-        return (
-          currentTimeInMinutes >= startInMinutes &&
-          currentTimeInMinutes <= endInMinutes
-        );
+        return beijingMinutes >= start && beijingMinutes <= end;
       });
 
       if (!currentTimeSlot) return null;
 
-      const [endHour, endMinute] =
-        currentTimeSlot.end.split(":").map(Number);
+      const [eh, em] = currentTimeSlot.end.split(":").map(Number);
+      const endMinutes = eh * 60 + em;
 
-      const endTime = new Date(beijingNow);
-      endTime.setUTCHours(endHour, endMinute, 0, 0);
-
-      const remaining = Math.max(0, endTime.getTime() - beijingNow.getTime());
+      const remaining = Math.max(
+        0,
+        (endMinutes - beijingMinutes) * 60 * 1000
+      );
 
       return {
         ...c,
