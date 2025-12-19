@@ -230,6 +230,16 @@ export default function Chifan() {
                   返回当前时间正在营业的食堂及其营业时间的 JSON 数据。
                 </p>
               </div>
+               <div
+                className={styles.card}
+                onClick={() => router.push("/api/kaifan")}
+              >
+                <h2>Method: GET</h2>
+                <code>/api/kaifan</code>
+                <p className="mt-2">
+                  返回所有食堂目前的开饭状态（已开饭、距离开饭时间、今日无饭）JSON 数据。
+                </p>
+              </div>
             </div>
           </Tabs.Content>
         </Tabs.Root>

@@ -52,6 +52,10 @@ NEXT_PUBLIC_BASE_URL=你的域名
 
 **Method:GET** 获取目前能吃的食堂的数据
 
+`/api/kaifan`
+
+**Method:GET** 获取目前食堂的开饭状态
+
 ## 与你的 bot 集成
 
 这个玩意儿可以轻松缝合到你的 next 项目中，搭建一个属于你的提醒吃饭 bot!
