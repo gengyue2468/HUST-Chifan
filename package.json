@@ -1,0 +1,21 @@
+{
+  "name": "hust-chifan",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MIT",
+  "workspaces": [
+    "backend",
+    "tui"
+  ],
+  "scripts": {
+    "dev:backend": "cd backend && bun run dev",
+    "dev:tui": "cd tui && bun run dev",
+    "build": "cd tui && bun run build",
+    "start:backend": "cd backend && bun run src/index.ts",
+    "start:tui": "cd tui && bun run dist/index.js"
+  },
+  "devDependencies": {
+    "@hono/node-server": "^1.19.9",
+    "@vercel/node": "^5.6.6"
+  }
+}
