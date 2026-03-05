@@ -17,7 +17,15 @@ const emptyStatus = { status: "Not Found", code: 404 };
 const app = new Hono();
 
 app.get("/", (c) => {
-  return c.json(emptyStatus, 404);
+  return c.json({
+    endpoints: [
+      { method: "GET", path: "/health" },
+      { method: "GET", path: "/canteen" },
+      { method: "GET", path: "/canteen/status" },
+      { method: "GET", path: "/canteen/:name" },
+      { method: "GET", path: "/canteen/:name/status" },
+    ],
+  });
 });
 
 app.get("/health", (c) => {
