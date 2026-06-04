@@ -7,7 +7,8 @@
     "@vercel/node": "^5.6.6",
     "cheerio": "^1.2.0",
     "dayjs": "^1.11.13",
-    "hono": "^4.12.2"
+    "hono": "^4.12.2",
+    "parse5-htmlparser2-tree-adapter": "^8.0.1"
   },
   "devDependencies": {
     "@types/bun": "latest"
