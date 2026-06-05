@@ -32,7 +32,7 @@ app.get("/", async (c) => {
       s.status === "open"
         ? `剩余 ${Math.floor((s.remaining ?? 0) / 60000)} 分钟`
         : s.next
-          ? `下次营业 ${dayjs(s.next).format("HH:mm")}`
+          ? `下次营业 ${dayjs(now.valueOf() + s.next).format("HH:mm")}`
           : "今日已结束";
     return `<tr><td>${s.name}</td><td bgcolor="${bg}">${label}</td><td>${detail}</td></tr>`;
   });

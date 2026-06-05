@@ -25,7 +25,7 @@ const getCanteenStatus = (times: CanteenInfo["times"], now: dayjs.Dayjs) => {
       remaining = endTs - nowTs;
       break;
     } else if (startTs >= nowTs) {
-      next = startTs;
+      next = startTs - nowTs;
       break;
     }
   }
