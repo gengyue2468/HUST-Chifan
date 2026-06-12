@@ -5,7 +5,7 @@ import {fetcher, convertTime, FetchError} from './hooks.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const backendApiUrl = process.env['BACKEND_API_URL'] || 'http://localhost:3000';
+const backendApiUrl = process.env['BACKEND_API_URL'] || 'http://localhost:5174';
 
 const banner = `
 ██   ██ ██   ██ ███████ ████████      ██████ ██   ██ ██ ███████  █████  ███    ██

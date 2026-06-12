@@ -128,14 +128,7 @@ app.all("*", (c) => {
   return c.json(emptyStatus, 404);
 });
 
-if (import.meta.main) {
-  const port = 5174;
-  Bun.serve({
-    fetch: app.fetch,
-    port,
-  });
-  // Helps verify which port is bound when running in different environments.
-  console.log(`HUST-Chifan backend is running on http://localhost:${port}`);
-}
-
-export default app;
+export default {
+  port: 5174,
+  fetch: app.fetch,
+};
