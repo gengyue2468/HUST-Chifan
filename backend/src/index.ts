@@ -128,4 +128,23 @@ app.all("*", (c) => {
   return c.json(emptyStatus, 404);
 });
 
+function resolvePort(): number {
+  const raw = process.env.PORT;
+  const parsed = raw ? Number.parseInt(raw, 10) : NaN;
+  if (Number.isInteger(parsed) && parsed > 0 && parsed <= 65535) {
+    return parsed;
+  }
+  return 3000;
+}
+
+if (import.meta.main) {
+  const port = resolvePort();
+  Bun.serve({
+    fetch: app.fetch,
+    port,
+  });
+  // Helps verify which port is bound when running in different environments.
+  console.log(`HUST-Chifan backend is running on http://localhost:${port}`);
+}
+
 export default app;
